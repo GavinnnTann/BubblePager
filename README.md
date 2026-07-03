@@ -1,10 +1,13 @@
 # BubblePager
 
-**BubblePager** turns Telegram video notes into a physical, receive-only pager.
-Send a round video bubble, a sticker, or a short text message to a Telegram bot,
-and it shows up seconds later on a 240×240 round display — no send path, no
-keyboard, no notifications feed to scroll through. Just messages arriving, one
-at a time, like a real pager.
+Ever wanted to glance at a Telegram telebubble *without* unlocking your phone
+and getting ambushed by seventeen group chats? Want a pager-like gadget for your
+kid, your partner, or your commitment-averse self?
+
+**BubblePager** is a physical, receive-only pager for Telegram. Send a round
+video note, a sticker, or a short text to a bot, and it pops up seconds later on
+a 240×240 round display — no send button, no keyboard, no notification feed to
+doomscroll. Just messages arriving one at a time, like a real pager (but cuter).
 
 <p align="center">
   <img src="docs/media/BubblePager_Demo.gif" alt="Sending a Telegram message and receiving it on the BubblePager" width="288">
@@ -20,11 +23,12 @@ device over WiFi.
 
 ## Why
 
-Telegram's circular video-note bubbles are a perfect shape match for a round
-display. BubblePager leans into that: video notes, video/static stickers, and
-short text messages are transcoded server-side into a lightweight MJPEG stream
-and pushed to the device over Server-Sent Events, where they play back directly
-on the round panel — filling the circle edge-to-edge.
+Telegram's circular video-note bubbles are a suspiciously perfect shape match for
+a round display — it would've been rude *not* to build this. BubblePager leans all
+the way in: video notes, video/static stickers, and short texts are transcoded
+server-side into a lightweight MJPEG stream and pushed to the device over
+Server-Sent Events, where they play back directly on the round panel — filling the
+circle edge-to-edge, exactly as nature (and a GC9A01 datasheet) intended.
 
 ## Features
 
