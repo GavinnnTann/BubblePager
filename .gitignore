@@ -1,0 +1,27 @@
+# ── Root safety net — secrets must never be committed ───────────────────────
+# Nested .gitignores in each subproject also cover these; this is belt-and-braces
+# in case the repo is initialised at this root.
+
+# Secrets
+**/.env
+**/include/config.h
+.env
+
+# Python
+.venv/
+**/.venv/
+**/venv/
+**/__pycache__/
+*.pyc
+
+# PlatformIO build
+**/.pio/
+C:/tmp/pa_build/
+
+# Transcoded media (temp)
+**/storage/*.mp4
+**/storage/*.mjpeg
+
+# OS / editor
+.DS_Store
+Thumbs.db
