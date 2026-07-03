@@ -7,7 +7,7 @@ keyboard, no notifications feed to scroll through. Just messages arriving, one
 at a time, like a real pager.
 
 <p align="center">
-  <img src="docs/media/BubblePager_Demo.gif" alt="Sending a Telegram message and receiving it on the BubblePager" width="720">
+  <img src="docs/media/BubblePager_Demo.gif" alt="Sending a Telegram message and receiving it on the BubblePager" width="288">
 </p>
 
 
