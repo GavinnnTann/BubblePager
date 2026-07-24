@@ -18,7 +18,7 @@ import os
 import tempfile
 
 from . import config
-from . import supabase_store as store
+from . import store
 from .events import bus
 
 log = logging.getLogger("telepager.transcoder")

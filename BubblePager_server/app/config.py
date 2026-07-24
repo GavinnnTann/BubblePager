@@ -20,13 +20,6 @@ WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "").strip()
 TG_API         = f"https://api.telegram.org/bot{BOT_TOKEN}"
 TG_FILE_API    = f"https://api.telegram.org/file/bot{BOT_TOKEN}"
 
-# Supabase
-SUPABASE_URL     = os.getenv("SUPABASE_URL", "").strip().rstrip("/")
-SUPABASE_KEY     = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip()
-SUPABASE_BUCKET  = os.getenv("SUPABASE_BUCKET", "videos").strip()
-SUPABASE_TABLE   = os.getenv("SUPABASE_TABLE", "videos").strip()
-SUPABASE_ENABLED = bool(SUPABASE_URL and SUPABASE_KEY)
-
 # Web server
 SERVER_HOST = os.getenv("SERVER_HOST", "0.0.0.0").strip()
 SERVER_PORT = int(os.getenv("SERVER_PORT", "8080"))
@@ -37,4 +30,7 @@ VIDEO_SIZE   = int(os.getenv("VIDEO_SIZE", "240"))
 JPEG_QUALITY = int(os.getenv("JPEG_QUALITY", "5"))
 STREAM_FPS   = int(os.getenv("STREAM_FPS", "12"))
 
+# Storage — blobs and the SQLite file both live under CACHE_DIR so a single
+# Docker volume mounted there holds all persistent state.
 CACHE_DIR = os.getenv("CACHE_DIR", "storage").strip()
+DB_PATH   = os.getenv("DB_PATH", os.path.join(CACHE_DIR, "telepager.db")).strip()

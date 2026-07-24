@@ -1,0 +1,45 @@
+# BubblePager server — run with `docker compose up -d` from this directory.
+#
+# All persistent state (transcoded .mjpeg blobs + the SQLite metadata db) lives
+# in ./storage, bind-mounted to /data. A bind mount rather than a named volume
+# so the files stay directly inspectable/rsync-able on the host — migrating the
+# existing library is just `rsync` into ./storage.
+
+services:
+  bubblepager:
+    build: .
+    image: bubblepager:latest
+    container_name: bubblepager
+    restart: unless-stopped
+
+    # Secrets + tunables (TELEGRAM_BOT_TOKEN, SERVER_PORT, …) come from .env.
+    env_file: .env
+
+    environment:
+      # Override the in-image defaults so both land on the mounted volume.
+      CACHE_DIR: /data
+      DB_PATH: /data/telepager.db
+      TZ: Asia/Singapore
+
+    # The pager talks plain HTTP to this port on the host's LAN IP.
+    ports:
+      - "${SERVER_PORT:-8090}:${SERVER_PORT:-8090}"
+
+    volumes:
+      - ./storage:/data
+
+    # Exec form — no shell, so no quoting games. urllib is in the stdlib, which
+    # saves installing curl into a slim image just for this.
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('SERVER_PORT','8090')+'/health').read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

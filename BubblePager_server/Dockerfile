@@ -12,9 +12,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app ./app
 
+# Blobs + SQLite default to a mounted volume rather than a path inside the
+# image, so nothing persistent is written to the container's writable layer.
+ENV CACHE_DIR=/data \
+    DB_PATH=/data/telepager.db
+VOLUME ["/data"]
+
 # The ESP32 connects to this port; expose/map it on the host.
-ENV SERVER_PORT=8080
-EXPOSE 8080
+ENV SERVER_PORT=8090
+EXPOSE 8090
 
 # uvicorn reads host/port; SERVER_PORT is echoed via the shell so a platform can
 # override it (Railway/Render set $PORT — pass -e SERVER_PORT=$PORT there).

@@ -15,8 +15,7 @@ import re
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse, StreamingResponse
 
-from . import bot, config, device, transcoder
-from . import supabase_store as store
+from . import bot, config, device, store, transcoder
 from .events import bus
 from .transcoder import split_frames
 
@@ -25,13 +24,13 @@ logging.basicConfig(level=logging.INFO,
 log = logging.getLogger("telepager.server")
 
 # Telegram file_unique_ids are URL-safe base64 chars only. Anything else is a
-# probe (path traversal, injection) — reject before it reaches the filesystem or
-# the Supabase Storage URL.
+# probe (path traversal, injection) — reject before it reaches the filesystem.
 _VALID_ID = re.compile(r"^[A-Za-z0-9_-]{1,128}$")
 
 
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
+    await store.init()
     if not config.BOT_TOKEN:
         log.warning("TELEGRAM_BOT_TOKEN not set — bot disabled")
     elif config.TELEGRAM_MODE == "webhook":
@@ -40,8 +39,8 @@ async def lifespan(app: FastAPI):
     else:
         bot.start_polling()
         await bot.set_my_commands()
-    log.info("TelePager server up (mode=%s, supabase=%s)",
-             config.TELEGRAM_MODE, config.SUPABASE_ENABLED)
+    log.info("TelePager server up (mode=%s, data=%s)",
+             config.TELEGRAM_MODE, config.CACHE_DIR)
     try:
         yield
     finally:
@@ -64,11 +63,12 @@ async def root():
 
 @app.get("/health")
 async def health():
+    db_ok = await store.healthy()
     return {
-        "status": "ok",
+        "status": "ok" if db_ok else "degraded",
         "sse_clients": bus.client_count,
         "queued": bus.pending_count,
-        "supabase": config.SUPABASE_ENABLED,
+        "db": db_ok,
         "mode": config.TELEGRAM_MODE,
     }
 

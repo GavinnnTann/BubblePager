@@ -15,7 +15,7 @@ doomscroll. Just messages arriving one at a time, like a real pager (but cuter).
 
 
 > **New here? → [Setup guide (`SETUP.md`)](SETUP.md)** walks you through bot,
-> Supabase, server, and firmware in ~20 minutes.
+> server, and firmware in ~20 minutes. No cloud accounts beyond Telegram.
 
 Built on an **ESP32-S3** driving a **GC9A01 round IPS display**, with a
 self-hosted **Python/FastAPI** server bridging the **Telegram Bot API** to the
